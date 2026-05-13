@@ -30,7 +30,7 @@ Paste the code → Commit
 
 Settings → Pages → Branch: main → Save
 
-Visit https://YOUR-USERNAME.github.io/vocab-register/
+Visit https://neha-manghnani.github.io/my-vocab-register/
 
 Share button → Add to Home Screen
 
