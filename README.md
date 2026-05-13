@@ -76,7 +76,7 @@ Your app is now live at:
 text
 
 Copy
-https://YOUR-USERNAME.github.io/vocab-register/
+https://neha-manghnani.github.io/my-vocab-register/
 Step 2: Add to Home Screen
 Open the URL above in Safari (must be Safari, not Chrome)
 
