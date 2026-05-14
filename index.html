@@ -342,7 +342,51 @@ if(!localStorage.getItem('vocabHelpSeen')){toggleHelp();localStorage.setItem('vo
 
 // Enter key
 document.getElementById('wordInput').addEventListener('keydown',function(e){if(e.key==='Enter')defineWord()});
+
+  function exportWords(){
+  let words=getWords();
+  if(!words.length){alert('No words to export!');return}
+  let blob=new Blob([JSON.stringify(words,null,2)],{type:'application/json'});
+  let a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='vocab-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+}
+
+function importWords(){
+  let input=document.createElement('input');
+  input.type='file';input.accept='.json';
+  input.onchange=function(e){
+    let file=e.target.files[0];if(!file)return;
+    let reader=new FileReader();
+    reader.onload=function(ev){
+      try{
+        let imported=JSON.parse(ev.target.result);
+        let existing=getWords();
+        let added=0;
+        imported.forEach(w=>{
+          if(!existing.find(e=>e.word.toLowerCase()===w.word.toLowerCase())){
+            existing.push(w);added++;
+          }
+        });
+        existing.sort((a,b)=>a.word.localeCompare(b.word));
+        saveWords(existing);
+        alert('Imported '+added+' new words! ('+imported.length+' total in file, duplicates skipped)');
+        if(activeTab==='words')renderWords();
+        if(activeTab==='progress')renderProgress();
+      }catch(err){alert('Invalid file format.')}
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+<div style="display:flex;gap:8px;margin-bottom:15px">
+<button class="btn" style="background:#2a2a4a;color:#4facfe;flex:1" onclick="exportWords()">📥 Export Backup</button>
+<button class="btn" style="background:#2a2a4a;color:#00f2fe;flex:1" onclick="importWords()">📤 Import Words</button>
+</div>
+  
 </script>
 </body>
-</html>'''
+</html>
 
