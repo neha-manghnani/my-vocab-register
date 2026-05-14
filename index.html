@@ -8,386 +8,156 @@
 <title>Vocab Register</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a1a;color:#e0e0e0;min-height:100vh;padding:15px;padding-bottom:80px}
-.header{text-align:center;margin-bottom:20px}
-.header h1{font-size:1.8em;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.tagline{color:#f093fb;font-style:italic;font-size:0.9em;margin-top:5px;opacity:0.9}
-.search-box{display:flex;gap:8px;margin-bottom:15px;flex-wrap:wrap}
-.search-box input{flex:1;min-width:150px;padding:12px 15px;border-radius:12px;border:1px solid #333;background:#1a1a2e;color:#fff;font-size:16px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a1a;color:#e0e0e0;min-height:100vh;padding:20px;padding-bottom:80px}
+h1{text-align:center;font-size:1.8em;margin-bottom:5px;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.tagline{text-align:center;color:#a78bfa;font-style:italic;margin-bottom:15px;font-size:0.9em}
+.tabs{display:flex;gap:8px;margin-bottom:15px}
+.tab{flex:1;text-align:center}
+.tab{padding:8px 16px;border:none;border-radius:20px;background:#1a1a2e;color:#888;cursor:pointer;font-size:0.85em;transition:all 0.3s}
+.tab.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
+.search-box{display:flex;gap:8px;margin-bottom:15px;align-items:center;flex-wrap:wrap}
+.search-box input{flex:1 1 100%;min-width:0}
+.search-btns{display:flex;gap:8px;width:100%}
+.search-box input{flex:1;min-width:150px;padding:12px 16px;border:1px solid #333;border-radius:12px;background:#1a1a2e;color:#fff;font-size:1em}
 .search-box input::placeholder{color:#666}
-.btn{padding:10px 16px;border-radius:12px;border:none;font-weight:600;cursor:pointer;font-size:14px;transition:all 0.2s}
+.btn{padding:10px 18px;border:none;border-radius:12px;font-weight:600;cursor:pointer;font-size:0.9em;transition:all 0.3s}
 .btn-define{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
 .btn-slang{background:linear-gradient(135deg,#f093fb,#f5576c);color:#fff}
-.btn-save{background:linear-gradient(135deg,#4facfe,#00f2fe);color:#000;width:100%;margin-top:10px;padding:12px}
 .btn-clear{background:#333;color:#fff;padding:10px 14px}
-.tabs{display:flex;gap:5px;margin-bottom:15px;overflow-x:auto}
-.tab{padding:8px 16px;border-radius:20px;background:#1a1a2e;color:#888;border:none;font-size:13px;cursor:pointer;white-space:nowrap}
-.tab.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
-.result-card{background:#1a1a2e;border-radius:12px;padding:15px;margin-bottom:12px;border:1px solid #2a2a4a}
-.result-card h3{color:#667eea;margin-bottom:8px;font-size:1.1em}
-.pos{color:#f093fb;font-style:italic;margin-bottom:5px;font-size:0.9em}
-.def{margin:5px 0;padding-left:10px;border-left:2px solid #333}
-.example{color:#4facfe;font-size:0.85em;margin-top:3px}
-.synonyms{color:#00f2fe;font-size:0.85em;margin-top:5px}
-.alpha-bar{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:15px;justify-content:center}
-.alpha-btn{width:32px;height:32px;border-radius:8px;border:none;background:#1a1a2e;color:#666;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.alpha-btn.has-words{background:#2a2a4a;color:#667eea;font-weight:bold}
-.alpha-btn.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
-.word-entry{background:#1a1a2e;border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid #2a2a4a;position:relative}
-.word-entry h4{color:#667eea}
-.word-entry .date{color:#666;font-size:0.75em;position:absolute;top:12px;right:12px}
-.word-entry .del-btn{position:absolute;bottom:10px;right:12px;background:#f5576c33;color:#f5576c;border:none;border-radius:6px;padding:4px 8px;font-size:11px;cursor:pointer}
+.btn-save{width:100%;padding:14px;background:linear-gradient(135deg,#00f2fe,#4facfe);color:#000;font-weight:700;border:none;border-radius:12px;cursor:pointer;font-size:1em;margin-top:10px}
+.result{background:#1a1a2e;border-radius:12px;padding:16px;margin-bottom:15px;border-left:3px solid #667eea}
+.result h3{color:#4facfe;margin-bottom:8px}
+.result .pos{color:#f093fb;font-style:italic;margin:8px 0 4px}
+.result .def{margin:4px 0;padding-left:12px;border-left:2px solid #333}
+.result .example{color:#a78bfa;font-size:0.85em;margin:2px 0 2px 12px}
+.result .synonyms{color:#00f2fe;font-size:0.85em;margin:4px 0 4px 12px}
+.word-card{background:#1a1a2e;border-radius:12px;padding:14px;margin-bottom:10px;position:relative}
+.word-card h3{color:#4facfe;margin-bottom:4px}
+.word-card .pos{color:#f093fb;font-size:0.85em}
+.word-card .def{font-size:0.9em;margin:4px 0;color:#ccc}
+.word-card .example{color:#a78bfa;font-size:0.8em}
+.word-card .delete-btn{position:absolute;top:10px;right:10px;background:#f5576c33;color:#f5576c;border:none;border-radius:8px;padding:4px 8px;cursor:pointer;font-size:0.8em}
+.word-card .date{font-size:0.7em;color:#666;margin-top:4px}
+.alpha-nav{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:15px}
+.alpha-btn{width:28px;height:28px;border:none;border-radius:6px;background:#1a1a2e;color:#666;cursor:pointer;font-size:0.75em;display:flex;align-items:center;justify-content:center}
+.alpha-btn.has-words{background:#667eea33;color:#667eea}
+.alpha-btn.active{background:#667eea;color:#fff}
 .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:15px}
-.stat-card{background:#1a1a2e;border-radius:12px;padding:15px;text-align:center;border:1px solid #2a2a4a}
-.stat-card .num{font-size:1.8em;font-weight:bold;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.stat-card .label{color:#888;font-size:0.8em;margin-top:3px}
-.milestone{background:#1a1a2e;border-radius:12px;padding:15px;margin-bottom:10px;border:1px solid #2a2a4a}
-.milestone h3{color:#f093fb;margin-bottom:8px}
-.progress-bar{height:8px;background:#2a2a4a;border-radius:4px;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,#667eea,#f093fb);border-radius:4px;transition:width 0.5s}
-.chart-bar{display:flex;align-items:end;gap:8px;height:100px;margin:15px 0;padding:0 10px}
-.chart-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
-.chart-col .bar{width:100%;background:linear-gradient(180deg,#667eea,#764ba2);border-radius:4px 4px 0 0;min-height:2px;transition:height 0.3s}
-.chart-col .lbl{font-size:10px;color:#888}
-.streak{text-align:center;padding:15px;background:#1a1a2e;border-radius:12px;margin-bottom:15px;border:1px solid #2a2a4a}
-.streak .fire{font-size:2em}
-.streak .count{font-size:1.5em;font-weight:bold;color:#f093fb}
-.empty{text-align:center;color:#666;padding:30px;font-style:italic}
-.help-btn{position:fixed;bottom:20px;right:20px;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;font-size:18px;cursor:pointer;box-shadow:0 4px 15px rgba(102,126,234,0.4);z-index:1000;touch-action:none;user-select:none}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:1001;align-items:center;justify-content:center;padding:20px}
+.stat-card{background:#1a1a2e;border-radius:12px;padding:14px;text-align:center}
+.stat-card .num{font-size:1.5em;font-weight:700;background:linear-gradient(135deg,#4facfe,#00f2fe);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-card .label{font-size:0.75em;color:#888;margin-top:4px}
+.milestone{background:#1a1a2e;border-radius:12px;padding:14px;margin-bottom:10px}
+.milestone .bar{height:8px;background:#333;border-radius:4px;overflow:hidden;margin:8px 0}
+.milestone .bar-fill{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:4px;transition:width 0.5s}
+.chart{display:flex;align-items:flex-end;gap:4px;height:100px;margin:15px 0;padding:10px;background:#1a1a2e;border-radius:12px}
+.chart-bar{flex:1;background:linear-gradient(to top,#667eea,#764ba2);border-radius:4px 4px 0 0;min-height:4px;position:relative}
+.chart-bar .chart-label{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:0.6em;color:#888}
+.backup-btns{display:flex;gap:8px;margin-bottom:15px}
+.backup-btns .btn{flex:1;background:#1a1a2e;color:#4facfe;border:1px solid #333}
+.help-btn{position:fixed;bottom:20px;right:20px;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;font-size:1.2em;cursor:pointer;box-shadow:0 4px 15px rgba(102,126,234,0.4);z-index:1000;touch-action:none}
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:2000;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.show{display:flex}
-.modal{background:#1a1a2e;border-radius:16px;padding:25px;max-width:500px;width:100%;max-height:80vh;overflow-y:auto;border:1px solid #2a2a4a}
-.modal h2{color:#667eea;margin-bottom:15px}
-.modal h3{color:#f093fb;margin-top:15px;margin-bottom:8px}
-.modal p{margin:5px 0;line-height:1.5;color:#ccc}
-.modal ul{margin:5px 0 10px 20px}
-.modal ul li{margin:4px 0;color:#ccc;line-height:1.4}
-.modal .close-btn{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:10px 24px;border-radius:10px;margin-top:20px;cursor:pointer;font-weight:600}
-.tips-box{background:#0d1b3e;border-radius:10px;padding:12px;margin-top:8px}
-.tips-box p{margin:6px 0;font-size:0.9em}
+.modal{background:#1a1a2e;border-radius:16px;padding:24px;max-width:400px;width:100%;max-height:80vh;overflow-y:auto}
+.modal h2{color:#4facfe;margin-bottom:12px;text-align:center}
+.modal p,.modal li{font-size:0.9em;margin:6px 0;color:#ccc;line-height:1.5}
+.modal .tip{background:#0a0a1a;border-radius:8px;padding:10px;margin:10px 0;font-size:0.85em}
+.error{background:#f5576c22;border:1px solid #f5576c;border-radius:12px;padding:12px;color:#f5576c;text-align:center;margin:10px 0}
 .loading{text-align:center;padding:20px;color:#888}
+#lookup-section,#words-section,#progress-section{display:none}
+#lookup-section.active,#words-section.active,#progress-section.active{display:block}
 </style>
 </head>
 <body>
-<div class="header">
 <h1>📖 Vocab Register</h1>
 <p class="tagline">"I came, I read, I registered." ✨</p>
-</div>
-  
 <div class="tabs">
-<button class="tab active" onclick="switchTab('lookup')">🔍 Lookup</button>
-<button class="tab" onclick="switchTab('words')">📚 My Words</button>
-<button class="tab" onclick="switchTab('progress')">📊 Progress</button>
+<button class="tab active" onclick="switchTab('lookup')" id="tab-lookup">🔍 Lookup</button>
+<button class="tab" onclick="switchTab('words')" id="tab-words">📚 My Words</button>
+<button class="tab" onclick="switchTab('progress')" id="tab-progress">📊 Progress</button>
 </div>
-  
+<div id="lookup-section" class="active">
 <div class="search-box">
-<input type="text" id="wordInput" placeholder="Type a word..." autocomplete="off" autocapitalize="none">
+<input type="text" id="wordInput" placeholder="Type a word..." onkeypress="if(event.key==='Enter')defineWord()">
 <button class="btn btn-clear" onclick="document.getElementById('wordInput').value=''">✕</button>
-<button class="btn btn-define" onclick="defineWord()">Define</button>
-<button class="btn btn-slang" onclick="slangWord()">Slang</button>
 </div>
-
-<div id="resultArea"></div>
-
-
-<div id="lookupTab"></div>
-<div id="wordsTab" style="display:none"></div>
-<div id="progressTab" style="display:none"></div>
-
-<div style="display:flex;gap:8px;margin-bottom:15px">
-<button class="btn" style="background:#2a2a4a;color:#4facfe;flex:1" onclick="exportWords()">📥 Export Backup</button>
-<button class="btn" style="background:#2a2a4a;color:#00f2fe;flex:1" onclick="importWords()">📤 Import Words</button>
+<div class="search-btns">
+<button class="btn btn-define" style="flex:1" onclick="defineWord()">Define</button>
+<button class="btn btn-slang" style="flex:1" onclick="slangWord()">Slang</button>
 </div>
-
+<div id="result"></div>
+</div>
+<div id="words-section">
+<div class="backup-btns">
+<button class="btn" onclick="exportWords()">📥 Export</button>
+<button class="btn" onclick="importWords()">📤 Import</button>
+</div>
+<div class="alpha-nav" id="alphaNav"></div>
+<div id="wordsList"></div>
+</div>
+<div id="progress-section">
+<div class="stats-grid" id="statsGrid"></div>
+<div class="milestone" id="milestone"></div>
+<div class="chart" id="chart"></div>
+</div>
 <button class="help-btn" id="helpBtn" onclick="openHelp()" ontouchstart="startDrag(event)" ontouchmove="doDrag(event)" ontouchend="endDrag(event)">❓</button>
-<div class="modal-overlay" id="helpModal">
+<div class="modal-overlay" id="helpModal" onclick="if(event.target===this)closeHelp()">
 <div class="modal">
 <h2>📖 How To Use</h2>
-<p style="color:#f093fb;font-style:italic;margin-bottom:15px">"I came, I read, I registered." ✨</p>
-
-<h3>🔍 Step 1 — Find a Word</h3>
+<p style="text-align:center;color:#a78bfa;margin-bottom:12px"><em>"I came, I read, I registered." ✨</em></p>
+<p><strong>🔍 Step 1 — Find a Word</strong></p>
 <p>Type any word you've stumbled across while reading.</p>
-<p>Two buttons, two vibes:</p>
-<ul>
-<li>📖 <strong>Define</strong> — proper dictionary definitions + real usage examples</li>
-<li>🗣️ <strong>Slang</strong> — informal, internet-speak, Gen Z energy</li>
+<ul style="padding-left:20px;margin:6px 0">
+<li><strong>Define</strong> — proper dictionary definitions + examples</li>
+<li><strong>Slang</strong> — informal meanings from Urban Dictionary</li>
 </ul>
-<p style="color:#4facfe;font-size:0.85em;margin-top:8px">💡 Can't find a word? The app tries multiple dictionaries automatically!</p>
-
-<h3>💾 Step 2 — Save It</h3>
-<p>Found a definition you like? Tap <strong>Save to Register</strong> and it's yours forever.</p>
-<ul>
-<li>✅ Stored alphabetically, A → Z</li>
-<li>🔒 100% private — lives only on YOUR device</li>
-<li>🚫 No accounts, no logins, no tracking</li>
+<p><strong>💾 Step 2 — Save It</strong></p>
+<p>Tap <strong>Save to Register</strong> and it's yours forever.</p>
+<p><strong>📚 Step 3 — Browse Your Collection</strong></p>
+<ul style="padding-left:20px;margin:6px 0">
+<li>Filter by letter</li>
+<li>Delete words you've mastered</li>
+<li>Export/Import for backups</li>
 </ul>
-
-<h3>📚 Step 3 — Browse Your Collection</h3>
-<p>Tap <strong>My Words</strong> to admire your growing vocabulary:</p>
-<ul>
-<li>🔤 Filter by letter — highlighted = words saved</li>
-<li>🗑️ Remove words you no longer need</li>
-<li>📅 See when you added each word</li>
+<p><strong>🏆 Step 4 — Level Up</strong></p>
+<ul style="padding-left:20px;margin:6px 0">
+<li>Track your streak</li>
+<li>Unlock milestones</li>
+<li>See monthly growth</li>
 </ul>
-
-<h3>🏆 Step 4 — Level Up</h3>
-<p>Tap <strong>Progress</strong> for the fun stuff:</p>
-<ul>
-<li>🔥 Day Streaks — add a word daily, watch the fire grow</li>
-<li>🌱→🧠 Milestones — unlock badges as you grow</li>
-<li>📈 Monthly Chart — see your learning patterns</li>
-</ul>
-
-<h3 style="margin-top:20px">✨ Pro Tips</h3>
-<div class="tips-box">
-<p>📱 <strong>Add to Home Screen</strong> — opens full-screen like a real app</p>
-<p>🖐️ <strong>Drag the ❓ button</strong> — put it wherever feels right</p>
-<p>🔄 <strong>Share the link</strong> — friends get their own blank register</p>
-<p>⚠️ <strong>Don't clear Safari data</strong> — that's where your words live!</p>
-<p>📶 <strong>Works offline</strong> — browse saved words without internet</p>
+<div class="tip">
+<p><strong>✨ Pro Tips</strong></p>
+<p>📱 Add to Home Screen for app-like experience</p>
+<p>🖐️ Drag the ❓ button wherever you want</p>
+<p>🔄 Share the link — friends get their own register</p>
+<p>⚠️ Don't clear Safari data — your words live there!</p>
 </div>
-
-<button class="close-btn" onclick="toggleHelp()">Got it! 🚀</button>
+<button class="btn btn-define" style="width:100%;margin-top:12px" onclick="closeHelp()">Got it! 🚀</button>
 </div>
 </div>
-
 <script>
-let currentResult=null;
-let activeTab='lookup';
-
-function getWords(){return JSON.parse(localStorage.getItem('vocabWords')||'[]')}
+let activeTab='lookup',currentResult=null,activeFilter=null,isDragging=false,dragStartX,dragStartY,btnStartX,btnStartY;
+function getWords(){try{return JSON.parse(localStorage.getItem('vocabWords'))||[]}catch(e){return[]}}
 function saveWords(w){localStorage.setItem('vocabWords',JSON.stringify(w))}
-
-function switchTab(t){
-activeTab=t;
-document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',['lookup','words','progress'][i]===t));
-document.getElementById('lookupTab').style.display=t==='lookup'?'block':'none';
-document.getElementById('wordsTab').style.display=t==='words'?'block':'none';
-document.getElementById('progressTab').style.display=t==='progress'?'block':'none';
-if(t==='words')renderWords();
-if(t==='progress')renderProgress();
-}
-
-async function defineWord(){
-const word=document.getElementById('wordInput').value.trim();
-if(!word)return;
-document.getElementById('resultArea').innerHTML='<div class="loading">🔍 Looking up "'+word+'"...</div>';
-try{
-let r=await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/'+encodeURIComponent(word));
-if(r.ok){let d=await r.json();showDictResult(d[0]);return}
-r=await fetch('https://en.wiktionary.org/api/rest_v1/page/definition/'+encodeURIComponent(word));
-if(r.ok){let d=await r.json();showWiktResult(d,word);return}
-document.getElementById('resultArea').innerHTML='<div class="result-card"><h3>😕 Not found</h3><p>Could not find "'+word+'" in any dictionary. Check spelling?</p></div>';
-}catch(e){document.getElementById('resultArea').innerHTML='<div class="result-card"><h3>⚠️ Error</h3><p>Network issue. Check your connection.</p></div>'}
-}
-
-async function slangWord(){
-const word=document.getElementById('wordInput').value.trim();
-if(!word)return;
-document.getElementById('resultArea').innerHTML='<div class="loading">🗣️ Looking up slang for "'+word+'"...</div>';
-try{
-let r=await fetch('https://api.urbandictionary.com/v0/define?term='+encodeURIComponent(word));
-if(r.ok){let d=await r.json();if(d.list&&d.list.length){showSlangResult(d.list,word);return}}
-document.getElementById('resultArea').innerHTML='<div class="result-card"><h3>😕 Not found</h3><p>No slang definitions for "'+word+'".</p></div>';
-}catch(e){document.getElementById('resultArea').innerHTML='<div class="result-card"><h3>⚠️ Error</h3><p>Network issue. Check your connection.</p></div>'}
-}
-
-function showDictResult(data){
-let html='<div class="result-card"><h3>'+data.word+'</h3>';
-let allDefs=[];
-if(data.meanings)data.meanings.forEach(m=>{
-html+='<p class="pos">'+m.partOfSpeech+'</p>';
-m.definitions.slice(0,3).forEach(d=>{
-html+='<div class="def">'+d.definition;
-if(d.example)html+='<p class="example">📝 "'+d.example+'"</p>';
-html+='</div>';
-allDefs.push({pos:m.partOfSpeech,def:d.definition,example:d.example||''});
-});
-if(m.synonyms&&m.synonyms.length)html+='<p class="synonyms">🔗 Similar: '+m.synonyms.slice(0,5).join(', ')+'</p>';
-});
-html+='<button class="btn btn-save" onclick="saveWord()">💾 Save to Register</button></div>';
-document.getElementById('resultArea').innerHTML=html;
-currentResult={word:data.word,definitions:allDefs,source:'dictionary',date:new Date().toISOString()};
-}
-
-function showWiktResult(data,word){
-let html='<div class="result-card"><h3>'+word+' <span style="font-size:0.7em;color:#888">(via Wiktionary)</span></h3>';
-let allDefs=[];
-Object.keys(data).forEach(lang=>{
-if(data[lang])data[lang].forEach(entry=>{
-if(entry.definitions)entry.definitions.forEach(d=>{
-html+='<p class="pos">'+(entry.partOfSpeech||'')+'</p>';
-d.definition=d.definition.replace(/<[^>]*>/g,'');
-html+='<div class="def">'+d.definition;
-if(d.examples&&d.examples.length)html+='<p class="example">📝 "'+d.examples[0].replace(/<[^>]*>/g,'')+'"</p>';
-html+='</div>';
-allDefs.push({pos:entry.partOfSpeech||'',def:d.definition,example:d.examples&&d.examples.length?d.examples[0].replace(/<[^>]*>/g,''):''});
-});
-});
-});
-html+='<button class="btn btn-save" onclick="saveWord()">💾 Save to Register</button></div>';
-document.getElementById('resultArea').innerHTML=html;
-currentResult={word:word,definitions:allDefs.slice(0,5),source:'wiktionary',date:new Date().toISOString()};
-}
-
-function showSlangResult(list,word){
-let html='<div class="result-card"><h3>'+word+' <span style="font-size:0.7em;color:#888">(slang)</span></h3>';
-let allDefs=[];
-list.slice(0,3).forEach(item=>{
-let def=item.definition.replace(/\\[|\\]/g,'');
-let ex=item.example?item.example.replace(/\\[|\\]/g,''):'';
-html+='<div class="def">'+def;
-if(ex)html+='<p class="example">📝 "'+ex+'"</p>';
-html+='</div>';
-allDefs.push({pos:'slang',def:def,example:ex});
-});
-html+='<button class="btn btn-save" onclick="saveWord()">💾 Save to Register</button></div>';
-document.getElementById('resultArea').innerHTML=html;
-currentResult={word:word,definitions:allDefs,source:'urban',date:new Date().toISOString()};
-}
-
-function saveWord(){
-if(!currentResult)return;
-let words=getWords();
-if(words.find(w=>w.word.toLowerCase()===currentResult.word.toLowerCase())){alert('Already saved!');return}
-words.push(currentResult);
-words.sort((a,b)=>a.word.localeCompare(b.word));
-saveWords(words);
-document.getElementById('resultArea').innerHTML='<div class="result-card" style="text-align:center"><h3>✅ Saved!</h3><p>"'+currentResult.word+'" added to your register.</p></div>';
-currentResult=null;
-}
-
-let wordFilter='all';
-function renderWords(){
-let words=getWords();
-let letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-let usedLetters=new Set(words.map(w=>w.word[0].toUpperCase()));
-let html='<div class="alpha-bar">';
-html+='<button class="alpha-btn '+(wordFilter==='all'?'active':'')+'" onclick="wordFilter=\\'all\\';renderWords()">All</button>';
-letters.forEach(l=>{
-let cls=wordFilter===l?'active':(usedLetters.has(l)?'has-words':'');
-html+='<button class="alpha-btn '+cls+'" onclick="wordFilter=\\''+l+'\\';renderWords()">'+l+'</button>';
-});
-html+='</div>';
-let filtered=wordFilter==='all'?words:words.filter(w=>w.word[0].toUpperCase()===wordFilter);
-if(!filtered.length){html+='<div class="empty">No words yet. Start looking up!</div>'}
-filtered.forEach((w,i)=>{
-let idx=words.indexOf(w);
-html+='<div class="word-entry"><h4>'+w.word+'</h4><span class="date">'+new Date(w.date).toLocaleDateString()+'</span>';
-w.definitions.slice(0,2).forEach(d=>{
-html+='<p class="pos" style="font-size:0.8em;margin-top:4px">'+d.pos+'</p>';
-html+='<p style="font-size:0.85em;color:#ccc;margin:2px 0">'+d.def.substring(0,100)+'</p>';
-if(d.example)html+='<p class="example" style="font-size:0.8em">📝 '+d.example.substring(0,80)+'</p>';
-});
-html+='<button class="del-btn" onclick="deleteWord('+idx+')">🗑️ Remove</button></div>';
-});
-document.getElementById('wordsTab').innerHTML=html;
-}
-
-function deleteWord(i){let w=getWords();w.splice(i,1);saveWords(w);renderWords()}
-
-function renderProgress(){
-let words=getWords();
-let total=words.length;
-let letters=new Set(words.map(w=>w.word[0].toUpperCase())).size;
-let now=new Date();
-let thisWeek=words.filter(w=>(now-new Date(w.date))<7*86400000).length;
-let thisMonth=words.filter(w=>{let d=new Date(w.date);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()}).length;
-let milestones=[{n:10,e:'🌱',t:'Seedling'},{n:25,e:'🌿',t:'Growing'},{n:50,e:'🌳',t:'Tree of Knowledge'},{n:100,e:'🏆',t:'Century'},{n:250,e:'🎓',t:'Scholar'},{n:500,e:'🧠',t:'Genius'}];
-let next=milestones.find(m=>m.n>total)||milestones[milestones.length-1];
-let prev=milestones.filter(m=>m.n<=total).pop();
-let pct=Math.min(100,Math.round(total/next.n*100));
-
-let streak=0;
-let day=new Date();day.setHours(0,0,0,0);
-while(true){
-let ds=day.toDateString();
-if(words.some(w=>new Date(w.date).toDateString()===ds)){streak++;day.setDate(day.getDate()-1)}else break;
-}
-
-let html='<div class="streak"><div class="fire">'+(streak>0?'🔥':'💤')+'</div><div class="count">'+streak+' day streak</div></div>';
-html+='<div class="stats-grid"><div class="stat-card"><div class="num">'+total+'</div><div class="label">Total Words</div></div>';
-html+='<div class="stat-card"><div class="num">'+thisWeek+'</div><div class="label">This Week</div></div>';
-html+='<div class="stat-card"><div class="num">'+thisMonth+'</div><div class="label">This Month</div></div>';
-html+='<div class="stat-card"><div class="num">'+letters+'/26</div><div class="label">Letters Used</div></div></div>';
-html+='<div class="milestone"><h3>'+next.e+' Next: '+next.t+' ('+next.n+' words)</h3><div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%"></div></div><p style="color:#888;font-size:0.8em;margin-top:5px">'+total+'/'+next.n+' words ('+pct+'%)</p></div>';
-html+='<div class="result-card"><h3>📈 Last 6 Months</h3><div class="chart-bar">';
-for(let i=5;i>=0;i--){
-let m=new Date();m.setMonth(m.getMonth()-i);
-let count=words.filter(w=>{let d=new Date(w.date);return d.getMonth()===m.getMonth()&&d.getFullYear()===m.getFullYear()}).length;
-let h=count?Math.max(10,count*8):2;
-html+='<div class="chart-col"><div class="bar" style="height:'+h+'px"></div><div class="lbl">'+m.toLocaleString("default",{month:"short"})+'</div></div>';
-}
-html+='</div></div>';
-if(prev)html+='<div class="result-card"><h3>🏅 Earned Badges</h3>'+milestones.filter(m=>m.n<=total).map(m=>'<p>'+m.e+' '+m.t+' ('+m.n+')</p>').join('')+'</div>';
-document.getElementById('progressTab').innerHTML=html;
-}
-
-function toggleHelp(){document.getElementById('helpModal').classList.toggle('show')}
-
-// Draggable help button
-(function(){
-const btn=document.getElementById('helpBtn');
-let isDrag=false,startX,startY,startL,startT;
-btn.addEventListener('touchstart',function(e){
-let t=e.touches[0];startX=t.clientX;startY=t.clientY;
-let r=btn.getBoundingClientRect();startL=r.left;startT=r.top;isDrag=false;
-},{passive:true});
-btn.addEventListener('touchmove',function(e){
-let t=e.touches[0];let dx=t.clientX-startX,dy=t.clientY-startY;
-if(Math.abs(dx)>5||Math.abs(dy)>5)isDrag=true;
-if(isDrag){btn.style.right='auto';btn.style.bottom='auto';btn.style.left=(startL+dx)+'px';btn.style.top=(startT+dy)+'px';e.preventDefault()}
-},{passive:false});
-btn.addEventListener('touchend',function(){if(isDrag){isDrag=false}});
-btn.onclick=function(){if(!isDrag)toggleHelp()};
-})();
-
-// First visit help
-if(!localStorage.getItem('vocabHelpSeen')){toggleHelp();localStorage.setItem('vocabHelpSeen','1')}
-
-// Enter key
-document.getElementById('wordInput').addEventListener('keydown',function(e){if(e.key==='Enter')defineWord()});
-
-  function exportWords(){
-  let words=getWords();
-  if(!words.length){alert('No words to export!');return}
-  let blob=new Blob([JSON.stringify(words,null,2)],{type:'application/json'});
-  let a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='vocab-backup-'+new Date().toISOString().slice(0,10)+'.json';
-  a.click();
-}
-
-function importWords(){
-  let input=document.createElement('input');
-  input.type='file';input.accept='.json';
-  input.onchange=function(e){
-    let file=e.target.files[0];if(!file)return;
-    let reader=new FileReader();
-    reader.onload=function(ev){
-      try{
-        let imported=JSON.parse(ev.target.result);
-        let existing=getWords();
-        let added=0;
-        imported.forEach(w=>{
-          if(!existing.find(e=>e.word.toLowerCase()===w.word.toLowerCase())){
-            existing.push(w);added++;
-          }
-        });
-        existing.sort((a,b)=>a.word.localeCompare(b.word));
-        saveWords(existing);
-        alert('Imported '+added+' new words! ('+imported.length+' total in file, duplicates skipped)');
-        if(activeTab==='words')renderWords();
-        if(activeTab==='progress')renderProgress();
-      }catch(err){alert('Invalid file format.')}
-    };
-    reader.readAsText(file);
-  };
-  input.click();
-}
-
-  
+function switchTab(tab){activeTab=tab;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('tab-'+tab).classList.add('active');document.querySelectorAll('[id$="-section"]').forEach(s=>s.classList.remove('active'));document.getElementById(tab+'-section').classList.add('active');if(tab==='words')renderWords();if(tab==='progress')renderProgress()}
+async function defineWord(){let word=document.getElementById('wordInput').value.trim();if(!word)return;document.getElementById('result').innerHTML='<div class="loading">Looking up "'+word+'"...</div>';try{let r=await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/'+encodeURIComponent(word));if(r.ok){let data=await r.json();showDefResult(data[0])}else{let wr=await fetch('https://en.wiktionary.org/api/rest_v1/page/definition/'+encodeURIComponent(word));if(wr.ok){let wdata=await wr.json();showWiktResult(word,wdata)}else{document.getElementById('result').innerHTML='<div class="error">Word not found. Check spelling?</div>'}}}catch(e){document.getElementById('result').innerHTML='<div class="error">Connection error. Check your internet.</div>'}}
+function showDefResult(data){let h='<div class="result"><h3>'+data.word+'</h3>';currentResult={word:data.word,definitions:[],date:new Date().toISOString()};if(data.phonetic)h+='<p style="color:#888;font-size:0.85em">'+data.phonetic+'</p>';data.meanings.forEach(m=>{h+='<p class="pos">'+m.partOfSpeech+'</p>';m.definitions.slice(0,3).forEach(d=>{h+='<div class="def">'+d.definition+'</div>';if(d.example)h+='<div class="example">📝 "'+d.example+'"</div>';currentResult.definitions.push({pos:m.partOfSpeech,def:d.definition,example:d.example||''})});if(m.synonyms&&m.synonyms.length)h+='<div class="synonyms">🔗 Similar: '+m.synonyms.slice(0,5).join(', ')+'</div>'});h+='<button class="btn-save" onclick="saveWord()">💾 Save to Register</button></div>';document.getElementById('result').innerHTML=h}
+function showWiktResult(word,data){let h='<div class="result"><h3>'+word+'</h3><p style="color:#888;font-size:0.8em">Source: Wiktionary</p>';currentResult={word:word,definitions:[],date:new Date().toISOString()};Object.keys(data).forEach(lang=>{if(data[lang]){data[lang].forEach(entry=>{h+='<p class="pos">'+entry.partOfSpeech+'</p>';if(entry.definitions){entry.definitions.slice(0,3).forEach(d=>{let def=d.definition.replace(/<[^>]*>/g,'');h+='<div class="def">'+def+'</div>';if(d.examples&&d.examples.length)h+='<div class="example">📝 "'+d.examples[0].replace(/<[^>]*>/g,'')+'"</div>';currentResult.definitions.push({pos:entry.partOfSpeech,def:def,example:d.examples&&d.examples.length?d.examples[0].replace(/<[^>]*>/g,''):''})})}})}}); h+='<button class="btn-save" onclick="saveWord()">💾 Save to Register</button></div>';document.getElementById('result').innerHTML=h}
+async function slangWord(){let word=document.getElementById('wordInput').value.trim();if(!word)return;document.getElementById('result').innerHTML='<div class="loading">Finding slang for "'+word+'"...</div>';try{let r=await fetch('https://api.urbandictionary.com/v0/define?term='+encodeURIComponent(word));if(r.ok){let data=await r.json();if(data.list&&data.list.length){let h='<div class="result"><h3>'+word+'</h3><p style="color:#f093fb;font-size:0.8em">🗣️ Urban Dictionary</p>';currentResult={word:word,definitions:[],date:new Date().toISOString()};data.list.slice(0,3).forEach(d=>{let def=d.definition.replace(/\[|\]/g,'');let ex=d.example.replace(/\[|\]/g,'');h+='<div class="def">'+def+'</div>';if(ex)h+='<div class="example">📝 "'+ex+'"</div>';h+='<p style="font-size:0.7em;color:#666">👍 '+d.thumbs_up+' 👎 '+d.thumbs_down+'</p>';currentResult.definitions.push({pos:'slang',def:def,example:ex})});h+='<button class="btn-save" onclick="saveWord()">💾 Save to Register</button></div>';document.getElementById('result').innerHTML=h}else{document.getElementById('result').innerHTML='<div class="error">No slang found for "'+word+'"</div>'}}else{document.getElementById('result').innerHTML='<div class="error">Could not reach Urban Dictionary.</div>'}}catch(e){document.getElementById('result').innerHTML='<div class="error">Connection error.</div>'}}
+function saveWord(){if(!currentResult)return;let words=getWords();if(words.find(w=>w.word.toLowerCase()===currentResult.word.toLowerCase())){alert('Already in your register!');return}words.push(currentResult);words.sort((a,b)=>a.word.localeCompare(b.word));saveWords(words);alert('✅ "'+currentResult.word+'" saved!')}
+function renderWords(){let words=getWords();let filtered=activeFilter?words.filter(w=>w.word[0].toUpperCase()===activeFilter):words;let nav='';let letters={};words.forEach(w=>{let l=w.word[0].toUpperCase();letters[l]=true});for(let i=65;i<=90;i++){let l=String.fromCharCode(i);let cls='alpha-btn';if(letters[l])cls+=' has-words';if(activeFilter===l)cls+=' active';nav+='<button class="'+cls+'" onclick="filterLetter(\''+l+'\')">'+l+'</button>'}document.getElementById('alphaNav').innerHTML=nav;let h='';if(!filtered.length)h='<p style="text-align:center;color:#666;padding:20px">No words yet!</p>';filtered.forEach(w=>{h+='<div class="word-card"><button class="delete-btn" onclick="deleteWord(\''+w.word.replace(/'/g,"\\'")+'\')">🗑️</button><h3>'+w.word+'</h3>';w.definitions.slice(0,2).forEach(d=>{h+='<span class="pos">'+d.pos+'</span> ';h+='<p class="def">'+d.def+'</p>';if(d.example)h+='<p class="example">📝 "'+d.example+'"</p>'});h+='<p class="date">Added: '+new Date(w.date).toLocaleDateString()+'</p></div>'});document.getElementById('wordsList').innerHTML=h}
+function filterLetter(l){activeFilter=activeFilter===l?null:l;renderWords()}
+function deleteWord(word){if(confirm('Delete "'+word+'"?')){let words=getWords().filter(w=>w.word!==word);saveWords(words);renderWords()}}
+function renderProgress(){let words=getWords();let total=words.length;let letters=new Set(words.map(w=>w.word[0].toUpperCase())).size;let thisWeek=words.filter(w=>(new Date()-new Date(w.date))/(1000*60*60*24)<=7).length;let thisMonth=words.filter(w=>{let d=new Date(w.date),n=new Date();return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear()}).length;let streak=calcStreak(words);document.getElementById('statsGrid').innerHTML='<div class="stat-card"><div class="num">'+total+'</div><div class="label">Total Words</div></div><div class="stat-card"><div class="num">'+letters+'</div><div class="label">Letters Used</div></div><div class="stat-card"><div class="num">'+thisWeek+'</div><div class="label">This Week</div></div><div class="stat-card"><div class="num">🔥 '+streak+'</div><div class="label">Day Streak</div></div>';let milestones=[{n:10,e:'🌱 Seedling'},{n:25,e:'🌿 Growing'},{n:50,e:'🌳 Tree'},{n:100,e:'🏆 Century'},{n:250,e:'🎓 Scholar'},{n:500,e:'🧠 Genius'}];let next=milestones.find(m=>m.n>total)||milestones[milestones.length-1];let pct=Math.min(100,Math.round((total/next.n)*100));document.getElementById('milestone').innerHTML='<p style="font-size:0.85em;color:#888">Next: <strong style="color:#4facfe">'+next.e+'</strong> ('+next.n+' words)</p><div class="bar"><div class="bar-fill" style="width:'+pct+'%"></div></div><p style="font-size:0.75em;color:#666">'+total+'/'+next.n+' ('+pct+'%)</p>';renderChart(words)}
+function calcStreak(words){if(!words.length)return 0;let dates=[...new Set(words.map(w=>new Date(w.date).toDateString()))].sort((a,b)=>new Date(b)-new Date(a));let streak=0,today=new Date();today.setHours(0,0,0,0);for(let i=0;i<dates.length;i++){let d=new Date(dates[i]);d.setHours(0,0,0,0);let expected=new Date(today);expected.setDate(expected.getDate()-i);if(d.getTime()===expected.getTime())streak++;else break}return streak}
+function renderChart(words){let months=[],now=new Date();for(let i=5;i>=0;i--){let d=new Date(now.getFullYear(),now.getMonth()-i,1);months.push({month:d.toLocaleString('default',{month:'short'}),count:words.filter(w=>{let wd=new Date(w.date);return wd.getMonth()===d.getMonth()&&wd.getFullYear()===d.getFullYear()}).length})}let max=Math.max(...months.map(m=>m.count),1);let h='';months.forEach(m=>{let pct=Math.max(5,(m.count/max)*100);h+='<div class="chart-bar" style="height:'+pct+'%"><span class="chart-label">'+m.month+'</span></div>'});document.getElementById('chart').innerHTML=h}
+function exportWords(){let words=getWords();if(!words.length){alert('No words to export!');return}let blob=new Blob([JSON.stringify(words,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='vocab-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click()}
+function importWords(){let input=document.createElement('input');input.type='file';input.accept='.json';input.onchange=function(e){let file=e.target.files[0];if(!file)return;let reader=new FileReader();reader.onload=function(ev){try{let imported=JSON.parse(ev.target.result);let existing=getWords();let added=0;imported.forEach(w=>{if(!existing.find(x=>x.word.toLowerCase()===w.word.toLowerCase())){existing.push(w);added++}});existing.sort((a,b)=>a.word.localeCompare(b.word));saveWords(existing);alert('Imported '+added+' new words!');if(activeTab==='words')renderWords();if(activeTab==='progress')renderProgress()}catch(err){alert('Invalid file.')}};reader.readAsText(file)};input.click()}
+function startDrag(e){isDragging=false;let t=e.touches[0];dragStartX=t.clientX;dragStartY=t.clientY;let btn=document.getElementById('helpBtn');let rect=btn.getBoundingClientRect();btnStartX=rect.left;btnStartY=rect.top}
+function doDrag(e){let t=e.touches[0];let dx=t.clientX-dragStartX;let dy=t.clientY-dragStartY;if(Math.abs(dx)>5||Math.abs(dy)>5)isDragging=true;if(isDragging){e.preventDefault();let btn=document.getElementById('helpBtn');btn.style.left=(btnStartX+dx)+'px';btn.style.top=(btnStartY+dy)+'px';btn.style.right='auto';btn.style.bottom='auto'}}
+function endDrag(e){if(!isDragging)openHelp()}
+function openHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(){document.getElementById('helpModal').classList.remove('show')}
+if(!localStorage.getItem('vocabHelpSeen')){openHelp();localStorage.setItem('vocabHelpSeen','true')}
 </script>
 </body>
 </html>
-
