@@ -73,7 +73,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <h1>📖 Vocab Register</h1>
 <p class="tagline">"I came, I read, I registered." ✨</p>
 </div>
-
+  
+<div class="tabs">
+<button class="tab active" onclick="switchTab('lookup')">🔍 Lookup</button>
+<button class="tab" onclick="switchTab('words')">📚 My Words</button>
+<button class="tab" onclick="switchTab('progress')">📊 Progress</button>
+</div>
+  
 <div class="search-box">
 <input type="text" id="wordInput" placeholder="Type a word..." autocomplete="off" autocapitalize="none">
 <button class="btn btn-clear" onclick="document.getElementById('wordInput').value=''">✕</button>
@@ -83,11 +89,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
 <div id="resultArea"></div>
 
-<div class="tabs">
-<button class="tab active" onclick="switchTab('lookup')">🔍 Lookup</button>
-<button class="tab" onclick="switchTab('words')">📚 My Words</button>
-<button class="tab" onclick="switchTab('progress')">📊 Progress</button>
-</div>
 
 <div id="lookupTab"></div>
 <div id="wordsTab" style="display:none"></div>
