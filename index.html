@@ -99,8 +99,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <button class="btn" style="background:#2a2a4a;color:#00f2fe;flex:1" onclick="importWords()">📤 Import Words</button>
 </div>
 
-<button class="help-btn" id="helpBtn" onclick="toggleHelp()">❓</button>
-
+<button class="help-btn" id="helpBtn" onclick="openHelp()" ontouchstart="startDrag(event)" ontouchmove="doDrag(event)" ontouchend="endDrag(event)">❓</button>
 <div class="modal-overlay" id="helpModal">
 <div class="modal">
 <h2>📖 How To Use</h2>
