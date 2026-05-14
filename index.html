@@ -1,400 +1,319 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Vocabulary Register</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f0f1a; color: #e0e0e0; min-height: 100vh; padding: 16px; }
-        .container { max-width: 600px; margin: 0 auto; }
-        h1 { text-align: center; font-size: 1.5rem; margin-bottom: 4px; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .subtitle { text-align: center; font-size: 0.8rem; color: #888; margin-bottom: 20px; }
-        .search-box { position: relative; margin-bottom: 16px; }
-        .search-box input { width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid #333; background: #1a1a2e; color: #fff; font-size: 1rem; outline: none; }
-        .search-box input:focus { border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.2); }
-        .btn-row { display: flex; gap: 8px; margin-bottom: 16px; }
-        .btn { flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-        .btn-define { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
-        .btn-slang { background: linear-gradient(135deg, #f093fb, #f5576c); color: white; }
-        .btn:active { transform: scale(0.96); }
-        .btn:disabled { opacity: 0.5; }
-        .result-card { background: #1a1a2e; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #2a2a4a; }
-        .result-card h3 { color: #667eea; margin-bottom: 4px; font-size: 1.1rem; }
-        .phonetic { color: #888; font-size: 0.85rem; margin-bottom: 10px; font-style: italic; }
-        .source-badge { display: inline-block; font-size: 0.65rem; padding: 2px 8px; border-radius: 20px; margin-bottom: 8px; font-weight: 600; }
-        .source-dict { background: #1e3a5f; color: #64b5f6; }
-        .source-wiki { background: #1e4a3a; color: #64f6b5; }
-        .source-slang { background: #4a1e3a; color: #f664b5; }
-        .meaning { margin-bottom: 12px; padding-left: 12px; border-left: 3px solid #333; }
-        .part-of-speech { color: #f093fb; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
-        .definition { margin-bottom: 6px; font-size: 0.9rem; line-height: 1.4; }
-        .example { color: #aaa; font-size: 0.85rem; font-style: italic; padding-left: 8px; border-left: 2px solid #444; margin-top: 4px; }
-        .save-btn { display: block; width: 100%; margin-top: 12px; padding: 10px; border: none; border-radius: 8px; background: #2d4a2d; color: #7ddb7d; font-weight: 600; cursor: pointer; font-size: 0.85rem; }
-        .save-btn:hover { background: #3d5a3d; }
-        .save-btn.saved { background: #1a3a1a; color: #4a8a4a; cursor: default; }
-        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
-        .stat { background: #1a1a2e; border-radius: 10px; padding: 12px; text-align: center; border: 1px solid #2a2a4a; }
-        .stat-num { font-size: 1.3rem; font-weight: 700; color: #667eea; }
-        .stat-label { font-size: 0.7rem; color: #888; margin-top: 2px; }
-        .alphabet { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 16px; justify-content: center; }
-        .alpha-btn { width: 32px; height: 32px; border-radius: 8px; border: 1px solid #333; background: #1a1a2e; color: #888; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .alpha-btn.has-words { background: #1e1e3e; color: #667eea; border-color: #667eea; }
-        .alpha-btn.active { background: #667eea; color: white; }
-        .register-section { margin-bottom: 16px; }
-        .letter-header { font-size: 1.2rem; font-weight: 700; color: #764ba2; margin: 16px 0 8px; padding-bottom: 4px; border-bottom: 2px solid #2a2a4a; }
-        .word-entry { background: #1a1a2e; border-radius: 10px; padding: 12px; margin-bottom: 8px; border: 1px solid #2a2a4a; }
-        .word-entry-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-        .word-entry h4 { color: #667eea; font-size: 0.95rem; }
-        .word-entry .date { font-size: 0.7rem; color: #666; }
-        .word-entry .def-text { font-size: 0.85rem; color: #ccc; line-height: 1.4; margin-bottom: 4px; }
-        .word-entry .ex-text { font-size: 0.8rem; color: #999; font-style: italic; }
-        .delete-btn { background: none; border: none; color: #f5576c; cursor: pointer; font-size: 1rem; padding: 4px; }
-        .tabs { display: flex; gap: 4px; margin-bottom: 16px; background: #1a1a2e; border-radius: 10px; padding: 4px; }
-        .tab { flex: 1; padding: 10px; border: none; border-radius: 8px; background: transparent; color: #888; font-size: 0.85rem; font-weight: 600; cursor: pointer; text-align: center; }
-        .tab.active { background: #667eea; color: white; }
-        .loading { text-align: center; color: #888; padding: 20px; }
-        .error { background: #2a1a1a; border: 1px solid #4a2a2a; border-radius: 10px; padding: 12px; color: #f5576c; font-size: 0.85rem; margin-bottom: 12px; }
-        .empty { text-align: center; color: #666; padding: 40px 20px; font-size: 0.9rem; }
-        .slang-note { font-size: 0.75rem; color: #f093fb; margin-top: 4px; }
-
-        /* How To Use Guide Styles */
-        .guide-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 1000; overflow-y: auto; padding: 16px; }
-        .guide-overlay.show { display: block; }
-        .guide-content { max-width: 550px; margin: 0 auto; background: #1a1a2e; border-radius: 16px; padding: 24px; border: 1px solid #2a2a4a; }
-        .guide-content h2 { text-align: center; color: #667eea; margin-bottom: 20px; font-size: 1.3rem; }
-        .guide-step { display: flex; gap: 12px; margin-bottom: 20px; align-items: flex-start; }
-        .step-num { min-width: 32px; height: 32px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; color: white; }
-        .step-text { flex: 1; }
-        .step-text h4 { color: #e0e0e0; margin-bottom: 4px; font-size: 0.95rem; }
-        .step-text p { color: #aaa; font-size: 0.85rem; line-height: 1.5; }
-        .guide-section { margin-bottom: 20px; }
-        .guide-section h3 { color: #f093fb; font-size: 0.9rem; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid #2a2a4a; }
-        .guide-tip { background: #0f0f1a; border-radius: 8px; padding: 12px; margin-bottom: 10px; border-left: 3px solid #667eea; }
-        .guide-tip p { font-size: 0.85rem; color: #ccc; line-height: 1.4; }
-        .guide-tip .tip-icon { font-size: 1rem; margin-right: 6px; }
-        .close-guide { display: block; width: 100%; padding: 14px; border: none; border-radius: 10px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 16px; }
-        .close-guide:active { transform: scale(0.97); }
-        .help-btn { position: fixed; bottom: 20px; right: 20px; width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); border: none; color: white; font-size: 1.3rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(102,126,234,0.4); z-index: 999; display: flex; align-items: center; justify-content: center; }
-        .help-btn:active { transform: scale(0.9); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Vocab Register</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#1a1a2e;color:#e0e0e0;min-height:100vh;padding:20px;padding-bottom:80px}
+.container{max-width:600px;margin:0 auto}
+h1{text-align:center;font-size:1.8em;margin-bottom:5px;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{text-align:center;color:#888;margin-bottom:20px;font-size:0.9em}
+.search-box{display:flex;gap:8px;margin-bottom:15px;position:relative}
+.search-box input{flex:1;padding:12px 35px 12px 15px;border-radius:12px;border:1px solid #333;background:#16213e;color:#fff;font-size:16px}
+.search-box input:focus{outline:none;border-color:#667eea}
+.clear-btn{position:absolute;right:200px;top:50%;transform:translateY(-50%);background:none;border:none;color:#888;font-size:18px;cursor:pointer;padding:5px}
+.btn{padding:12px 16px;border-radius:12px;border:none;font-weight:600;cursor:pointer;font-size:14px}
+.btn-define{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
+.btn-slang{background:linear-gradient(135deg,#f093fb,#f5576c);color:#fff}
+.btn-save{background:linear-gradient(135deg,#4facfe,#00f2fe);color:#1a1a2e;width:100%;margin-top:10px;padding:14px}
+.tabs{display:flex;gap:8px;margin-bottom:20px}
+.tab{flex:1;padding:10px;text-align:center;border-radius:10px;background:#16213e;border:1px solid #333;color:#888;cursor:pointer;font-size:14px}
+.tab.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none}
+.result{background:#16213e;border-radius:12px;padding:15px;margin-bottom:15px;border:1px solid #333}
+.result h3{color:#667eea;margin-bottom:8px}
+.result .pos{color:#f093fb;font-style:italic;margin-bottom:5px;font-size:0.9em}
+.result .def{margin-bottom:4px;padding-left:10px;border-left:2px solid #333}
+.result .example{color:#888;font-size:0.85em;margin-top:2px;padding-left:15px}
+.result .synonyms{color:#4facfe;font-size:0.85em;margin-top:5px}
+.word-card{background:#16213e;border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid #333}
+.word-card h4{color:#667eea;display:flex;justify-content:space-between;align-items:center}
+.word-card .delete-btn{background:#f5576c;color:#fff;border:none;border-radius:6px;padding:4px 8px;font-size:11px;cursor:pointer}
+.word-card .meta{color:#888;font-size:0.8em;margin-top:4px}
+.alpha-nav{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:15px;justify-content:center}
+.alpha-nav button{width:28px;height:28px;border-radius:6px;border:1px solid #333;background:#16213e;color:#888;font-size:11px;cursor:pointer}
+.alpha-nav button.has-words{background:#667eea;color:#fff;border:none}
+.alpha-nav button.active{background:#f093fb;color:#fff;border:none}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:15px}
+.stat-card{background:#16213e;border-radius:12px;padding:15px;text-align:center;border:1px solid #333}
+.stat-card .num{font-size:1.8em;font-weight:700;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-card .label{color:#888;font-size:0.8em;margin-top:4px}
+.milestone{background:#16213e;border-radius:12px;padding:15px;margin-bottom:10px;border:1px solid #333}
+.milestone h3{margin-bottom:10px;color:#667eea}
+.progress-bar{height:8px;background:#333;border-radius:4px;overflow:hidden;margin-bottom:8px}
+.progress-fill{height:100%;background:linear-gradient(90deg,#667eea,#764ba2);border-radius:4px;transition:width 0.5s}
+.chart{display:flex;align-items:flex-end;gap:8px;height:100px;margin-top:15px;padding:10px;background:#16213e;border-radius:12px;border:1px solid #333}
+.chart-bar{flex:1;background:linear-gradient(180deg,#667eea,#764ba2);border-radius:4px 4px 0 0;min-height:4px;position:relative}
+.chart-bar .chart-label{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:9px;color:#888}
+.chart-bar .chart-val{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:9px;color:#667eea}
+.loading{text-align:center;color:#888;padding:20px}
+.error{color:#f5576c;text-align:center;padding:10px}
+.help-btn{position:fixed;bottom:20px;right:20px;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:0 4px 15px rgba(102,126,234,0.4);z-index:1000;touch-action:none;user-select:none}
+.help-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:1001;padding:20px;overflow-y:auto}
+.help-content{background:#1a1a2e;border-radius:16px;padding:20px;max-width:500px;margin:20px auto;border:1px solid #333}
+.help-content h2{color:#667eea;margin-bottom:15px}
+.help-content h3{color:#f093fb;margin:15px 0 8px}
+.help-content p,.help-content li{color:#ccc;margin-bottom:8px;font-size:0.9em;line-height:1.5}
+.help-content ul{padding-left:20px}
+.help-close{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;width:100%;margin-top:15px;font-size:16px}
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>📖 Vocabulary Register</h1>
-        <p class="subtitle">Your personal word collection</p>
+<div class="container">
+<h1>📖 Vocab Register</h1>
+<p class="subtitle">Your personal word collection</p>
+<div class="search-box">
+<input type="text" id="wordInput" placeholder="Type a word..." autocomplete="off">
+<button class="clear-btn" onclick="document.getElementById('wordInput').value=''">✕</button>
+<button class="btn btn-define" onclick="defineWord()">Define</button>
+<button class="btn btn-slang" onclick="slangWord()">Slang</button>
+</div>
+<div id="result"></div>
+<div class="tabs">
+<div class="tab active" onclick="switchTab('search')">🔍 Search</div>
+<div class="tab" onclick="switchTab('words')">📚 My Words</div>
+<div class="tab" onclick="switchTab('progress')">📊 Progress</div>
+</div>
+<div id="searchTab"></div>
+<div id="wordsTab" style="display:none">
+<div class="alpha-nav" id="alphaNav"></div>
+<div id="wordsList"></div>
+</div>
+<div id="progressTab" style="display:none">
+<div class="stats-grid" id="statsGrid"></div>
+<div class="milestone" id="milestoneSection"></div>
+<div id="chartSection"></div>
+</div>
+</div>
 
-        <div class="tabs">
-            <button class="tab active" onclick="switchTab('search')">🔍 Look Up</button>
-            <button class="tab" onclick="switchTab('register')">📚 My Words</button>
-        </div>
+<button class="help-btn" id="helpBtn" onclick="toggleHelp()">❓</button>
+<div class="help-modal" id="helpModal">
+<div class="help-content">
+<h2>📖 How To Use</h2>
+<p style="color:#f093fb;font-style:italic;margin-bottom:15px">"I came, I read, I registered." ✨</p>
 
-        <div id="search-tab">
-            <div class="search-box">
-                <input type="text" id="wordInput" placeholder="Enter a word or phrase..." autocomplete="off" />
-            </div>
-            <div class="btn-row">
-                <button class="btn btn-define" onclick="lookupWord()">📖 Define</button>
-                <button class="btn btn-slang" onclick="lookupSlang()">🗣️ Slang</button>
-            </div>
-            <div id="results"></div>
-        </div>
+<h3>🔍 Step 1 — Find a Word</h3>
+<p>Type any word you've stumbled across while reading.</p>
+<p>Two buttons, two vibes:</p>
+<ul>
+<li>📖 <strong>Define</strong> — proper dictionary definitions + real usage examples (great for books, essays, articles)</li>
+<li>🗣️ <strong>Slang</strong> — informal, internet-speak, Gen Z energy (think Urban Dictionary)</li>
+</ul>
+<p style="color:#4facfe;font-size:0.85em;margin-top:8px">💡 Can't find a word? The app tries multiple dictionaries automatically — from basic vocab to advanced academic terms like "solipsistic"!</p>
 
-        <div id="register-tab" style="display:none;">
-            <div class="stats">
-                <div class="stat"><div class="stat-num" id="totalWords">0</div><div class="stat-label">Total Words</div></div>
-                <div class="stat"><div class="stat-num" id="lettersUsed">0</div><div class="stat-label">Letters</div></div>
-                <div class="stat"><div class="stat-num" id="thisWeek">0</div><div class="stat-label">This Week</div></div>
-            </div>
-            <div class="alphabet" id="alphabet"></div>
-            <div id="wordList"></div>
-        </div>
-    </div>
+<h3>💾 Step 2 — Save It</h3>
+<p>Found a definition you like? Tap <strong>Save to Register</strong> and it's yours forever.</p>
+<ul>
+<li>✅ Stored alphabetically, A → Z</li>
+<li>🔒 100% private — lives only on YOUR device</li>
+<li>🚫 No accounts, no logins, no tracking</li>
+</ul>
 
-    <!-- Help Button -->
-    <button class="help-btn" onclick="openGuide()">?</button>
+<h3>📚 Step 3 — Browse Your Collection</h3>
+<p>Tap <strong>My Words</strong> to admire your growing vocabulary:</p>
+<ul>
+<li>🔤 Filter by letter — highlighted letters = words you've saved</li>
+<li>🗑️ Remove words you no longer need</li>
+<li>📅 See when you added each word</li>
+</ul>
 
-    <!-- How To Use Guide Overlay -->
-    <div class="guide-overlay" id="guideOverlay">
-        <div class="guide-content">
-            <h2>📖 How to Use</h2>
+<h3>🏆 Step 4 — Level Up</h3>
+<p>Tap <strong>Progress</strong> for the fun stuff:</p>
+<ul>
+<li>🔥 <strong>Day Streaks</strong> — add a word daily, watch the fire grow</li>
+<li>🌱→🧠 <strong>Milestones</strong> — unlock badges (Seedling → Scholar → Genius)</li>
+<li>📈 <strong>Monthly Chart</strong> — see your learning patterns</li>
+</ul>
 
-            <div class="guide-section">
-                <h3>🔍 Looking Up Words</h3>
-                <div class="guide-step">
-                    <div class="step-num">1</div>
-                    <div class="step-text">
-                        <h4>Type a word</h4>
-                        <p>Enter any word or phrase in the search box on the Look Up tab.</p>
-                    </div>
-                </div>
-                <div class="guide-step">
-                    <div class="step-num">2</div>
-                    <div class="step-text">
-                        <h4>Choose your source</h4>
-                        <p><strong>📖 Define</strong> — for standard dictionary definitions (basic to advanced vocabulary).<br><strong>🗣️ Slang</strong> — for informal terms, internet slang, and colloquialisms.</p>
-                    </div>
-                </div>
-                <div class="guide-step">
-                    <div class="step-num">3</div>
-                    <div class="step-text">
-                        <h4>Save it</h4>
-                        <p>Tap <strong>💾 Save to Register</strong> to add the word to your personal collection.</p>
-                    </div>
-                </div>
-            </div>
+<h3 style="margin-top:20px">✨ Pro Tips</h3>
+<div style="background:#0d1b3e;border-radius:10px;padding:12px;margin-top:8px">
+<p>📱 <strong>Add to Home Screen</strong> — opens full-screen like a real app</p>
+<p>🖐️ <strong>Drag the ❓ button</strong> — put it wherever feels right</p>
+<p>🔄 <strong>Share the link</strong> — friends get their own blank register</p>
+<p>⚠️ <strong>Don't clear Safari data</strong> — that's where your words live!</p>
+<p>📶 <strong>Works offline</strong> — browse saved words without internet</p>
+</div>
+<button class="help-close" onclick="toggleHelp()">Got it! ✨</button>
+</div>
+</div>
 
-            <div class="guide-section">
-                <h3>📚 Browsing Your Words</h3>
-                <div class="guide-step">
-                    <div class="step-num">1</div>
-                    <div class="step-text">
-                        <h4>Open My Words tab</h4>
-                        <p>Tap the <strong>📚 My Words</strong> tab to see your full collection.</p>
-                    </div>
-                </div>
-                <div class="guide-step">
-                    <div class="step-num">2</div>
-                    <div class="step-text">
-                        <h4>Filter by letter</h4>
-                        <p>Tap any highlighted letter to show only words starting with that letter. Tap <strong>All</strong> to see everything.</p>
-                    </div>
-                </div>
-                <div class="guide-step">
-                    <div class="step-num">3</div>
-                    <div class="step-text">
-                        <h4>Remove words</h4>
-                        <p>Tap the 🗑️ icon next to any word to delete it from your register.</p>
-                    </div>
-                </div>
-            </div>
+<script>
+let currentResult=null,activeFilter='all',dragState={isDragging:false,startX:0,startY:0,startLeft:0,startTop:0};
+const MILESTONES=[{n:10,e:'🌱',t:'Seedling'},{n:25,e:'🌿',t:'Growing'},{n:50,e:'🌳',t:'Tree of Knowledge'},{n:100,e:'🏆',t:'Century Club'},{n:250,e:'🎓',t:'Scholar'},{n:500,e:'🧠',t:'Genius'}];
 
-            <div class="guide-section">
-                <h3>💡 Tips</h3>
-                <div class="guide-tip">
-                    <p><span class="tip-icon">📱</span> <strong>Add to Home Screen</strong> — In Safari, tap Share → "Add to Home Screen" for app-like access.</p>
-                </div>
-                <div class="guide-tip">
-                    <p><span class="tip-icon">🔒</span> <strong>Your words are private</strong> — Saved only on this device. No one else can see them.</p>
-                </div>
-                <div class="guide-tip">
-                    <p><span class="tip-icon">⚠️</span> <strong>Don't clear Safari data</strong> — This will erase your saved vocabulary.</p>
-                </div>
-                <div class="guide-tip">
-                    <p><span class="tip-icon">📶</span> <strong>Works offline</strong> — Browsing saved words works without internet. Only new lookups need a connection.</p>
-                </div>
-                <div class="guide-tip">
-                    <p><span class="tip-icon">🔗</span> <strong>Safe to share</strong> — If you share the link, others get their own empty register. Your words stay yours.</p>
-                </div>
-            </div>
+function getWords(){return JSON.parse(localStorage.getItem('vocabRegister')||'[]')}
+function saveWords(w){localStorage.setItem('vocabRegister',JSON.stringify(w))}
 
-            <button class="close-guide" onclick="closeGuide()">Got it! ✨</button>
-        </div>
-    </div>
+async function defineWord(){
+const word=document.getElementById('wordInput').value.trim();
+if(!word)return;
+document.getElementById('result').innerHTML='<div class="loading">Looking up "'+word+'"...</div>';
+try{
+let r=await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/'+encodeURIComponent(word));
+if(r.ok){let d=await r.json();showDictResult(d[0]);return}
+r=await fetch('https://en.wiktionary.org/api/rest_v1/page/definition/'+encodeURIComponent(word));
+if(r.ok){let d=await r.json();showWiktResult(d,word);return}
+document.getElementById('result').innerHTML='<div class="error">Word not found in any dictionary. Try checking spelling.</div>';
+}catch(e){document.getElementById('result').innerHTML='<div class="error">Network error. Check connection.</div>'}
+}
 
-    <script>
-        let vocabulary = JSON.parse(localStorage.getItem("vocabRegister") || "{}");
-        let currentFilter = null;
-        let firstVisit = !localStorage.getItem("vocabGuideShown");
+async function slangWord(){
+const word=document.getElementById('wordInput').value.trim();
+if(!word)return;
+document.getElementById('result').innerHTML='<div class="loading">Searching slang for "'+word+'"...</div>';
+try{
+const r=await fetch('https://api.urbandictionary.com/v0/define?term='+encodeURIComponent(word));
+if(r.ok){const d=await r.json();if(d.list&&d.list.length){showSlangResult(d.list,word);return}}
+document.getElementById('result').innerHTML='<div class="error">No slang found for "'+word+'".</div>';
+}catch(e){document.getElementById('result').innerHTML='<div class="error">Network error.</div>'}
+}
 
-        // Show guide on first visit
-        if (firstVisit) {
-            setTimeout(() => { openGuide(); localStorage.setItem("vocabGuideShown", "true"); }, 500);
-        }
+function showDictResult(data){
+let h='<div class="result"><h3>'+data.word+'</h3>';
+if(data.phonetic)h+='<p style="color:#888;margin-bottom:10px">'+data.phonetic+'</p>';
+currentResult={word:data.word,definitions:[],source:'dictionary'};
+data.meanings.forEach(m=>{
+h+='<p class="pos">'+m.partOfSpeech+'</p>';
+m.definitions.slice(0,3).forEach(d=>{
+h+='<p class="def">• '+d.definition+'</p>';
+if(d.example)h+='<p class="example">📝 "'+d.example+'"</p>';
+currentResult.definitions.push({pos:m.partOfSpeech,def:d.definition,example:d.example||''});
+});
+if(m.synonyms&&m.synonyms.length)h+='<p class="synonyms">🔗 Similar: '+m.synonyms.slice(0,5).join(', ')+'</p>';
+});
+h+='<button class="btn btn-save" onclick="saveWord()">💾 Save to Register</button></div>';
+document.getElementById('result').innerHTML=h;
+}
 
-        function openGuide() { document.getElementById("guideOverlay").classList.add("show"); }
-        function closeGuide() { document.getElementById("guideOverlay").classList.remove("show"); }
+function showWiktResult(data,word){
+let h='<div class="result"><h3>'+word+'</h3><p style="color:#4facfe;font-size:0.8em;margin-bottom:10px">Source: Wiktionary</p>';
+currentResult={word:word,definitions:[],source:'wiktionary'};
+Object.keys(data).forEach(lang=>{
+if(!data[lang])return;
+data[lang].forEach(entry=>{
+if(!entry.definitions)return;
+h+='<p class="pos">'+entry.partOfSpeech+'</p>';
+entry.definitions.slice(0,3).forEach(d=>{
+const clean=d.definition.replace(/<[^>]*>/g,'');
+h+='<p class="def">• '+clean+'</p>';
+if(d.examples&&d.examples.length)h+='<p class="example">📝 "'+d.examples[0].replace(/<[^>]*>/g,'')+'"</p>';
+currentResult.definitions.push({pos:entry.partOfSpeech,def:clean,example:d.examples&&d.examples.length?d.examples[0].replace(/<[^>]*>/g,''):''});
+});
+});
+});
+h+='<button class="btn btn-save" onclick="saveWord()">💾 Save to Register</button></div>';
+document.getElementById('result').innerHTML=h;
+}
 
-        // Tab switching
-        function switchTab(tab) {
-            document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-            if (tab === "search") {
-                document.getElementById("search-tab").style.display = "block";
-                document.getElementById("register-tab").style.display = "none";
-                document.querySelectorAll(".tab")[0].classList.add("active");
-            } else {
-                document.getElementById("search-tab").style.display = "none";
-                document.getElementById("register-tab").style.display = "block";
-                document.querySelectorAll(".tab")[1].classList.add("active");
-                renderRegister();
-            }
-        }
+function showSlangResult(list,word){
+let h='<div class="result"><h3>'+word+'</h3><p style="color:#f093fb;font-size:0.8em;margin-bottom:10px">Source: Urban Dictionary</p>';
+currentResult={word:word,definitions:[],source:'slang'};
+list.slice(0,3).forEach(item=>{
+const def=item.definition.replace(/\[|\]/g,'');
+const ex=item.example.replace(/\[|\]/g,'');
+h+='<p class="def">• '+def+'</p>';
+if(ex)h+='<p class="example">📝 "'+ex+'"</p>';
+currentResult.definitions.push({pos:'slang',def:def,example:ex});
+});
+h+='<button class="btn btn-save" onclick="saveWord()">💾 Save to Register</button></div>';
+document.getElementById('result').innerHTML=h;
+}
 
-        // Enter key support
-        document.getElementById("wordInput").addEventListener("keypress", function(e) {
-            if (e.key === "Enter") lookupWord();
-        });
+function saveWord(){
+if(!currentResult)return;
+const words=getWords();
+const exists=words.find(w=>w.word.toLowerCase()===currentResult.word.toLowerCase());
+if(exists){alert('Already in register!');return}
+words.push({...currentResult,date:new Date().toISOString()});
+words.sort((a,b)=>a.word.toLowerCase().localeCompare(b.word.toLowerCase()));
+saveWords(words);
+document.getElementById('result').innerHTML='<div class="result" style="text-align:center;color:#4facfe">✅ "'+currentResult.word+'" saved!</div>';
+currentResult=null;
+}
 
-        // === DICTIONARY LOOKUP (Multi-source) ===
-        async function lookupWord() {
-            const word = document.getElementById("wordInput").value.trim().toLowerCase();
-            if (!word) return;
-            document.getElementById("results").innerHTML = '<div class="loading">Looking up "<strong>' + word + '</strong>"...</div>';
+function switchTab(tab){
+document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['search','words','progress'][i]===tab));
+document.getElementById('searchTab').style.display=tab==='search'?'block':'none';
+document.getElementById('wordsTab').style.display=tab==='words'?'block':'none';
+document.getElementById('progressTab').style.display=tab==='progress'?'block':'none';
+if(tab==='words')renderWords();
+if(tab==='progress')renderProgress();
+}
 
-            let result = await tryFreeDictionary(word);
-            if (!result) result = await tryWiktionary(word);
-            if (!result) {
-                document.getElementById("results").innerHTML = '<div class="error">Could not find "<strong>' + word + '</strong>" in any dictionary. Try the Slang button for informal terms, or check your spelling.</div>';
-                return;
-            }
-            displayResult(result);
-        }
+function renderWords(){
+const words=getWords(),nav=document.getElementById('alphaNav'),list=document.getElementById('wordsList');
+const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const usedLetters=new Set(words.map(w=>w.word[0].toUpperCase()));
+nav.innerHTML=letters.map(l=>'<button class="'+(usedLetters.has(l)?'has-words':'')+(activeFilter===l?' active':'')+'" onclick="filterLetter(''+l+'')">'+l+'</button>').join('')+'<button class="'+(activeFilter==='all'?' active':'')+'" onclick="filterLetter('all')">All</button>';
+const filtered=activeFilter==='all'?words:words.filter(w=>w.word[0].toUpperCase()===activeFilter);
+if(!filtered.length){list.innerHTML='<div class="loading">'+(words.length?'No words starting with "'+activeFilter+'"':'Your register is empty. Look up and save some words!')+'</div>';return}
+list.innerHTML=filtered.map(w=>'<div class="word-card"><h4>'+w.word+' <button class="delete-btn" onclick="deleteWord(''+w.word+'')">🗑️</button></h4><p class="def" style="font-size:0.85em;margin-top:5px">'+w.definitions[0].def.slice(0,80)+'...</p><p class="meta">'+w.source+' • '+new Date(w.date).toLocaleDateString()+'</p></div>').join('');
+}
 
-        // Source 1: Free Dictionary API
-        async function tryFreeDictionary(word) {
-            try {
-                const res = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + encodeURIComponent(word));
-                if (!res.ok) return null;
-                const data = await res.json();
-                const entry = data[0];
-                let meanings = [];
-                entry.meanings.forEach(m => {
-                    m.definitions.slice(0, 3).forEach(d => {
-                        meanings.push({ partOfSpeech: m.partOfSpeech, definition: d.definition, example: d.example || null });
-                    });
-                });
-                return { word: entry.word, phonetic: entry.phonetic || "", source: "dictionary", meanings };
-            } catch(e) { return null; }
-        }
+function filterLetter(l){activeFilter=l;renderWords()}
+function deleteWord(word){if(confirm('Delete "'+word+'"?')){const w=getWords().filter(x=>x.word!==word);saveWords(w);renderWords()}}
 
-        // Source 2: Wiktionary API (covers advanced/academic vocabulary)
-        async function tryWiktionary(word) {
-            try {
-                const res = await fetch("https://en.wiktionary.org/api/rest_v1/page/definition/" + encodeURIComponent(word));
-                if (!res.ok) return null;
-                const data = await res.json();
-                let meanings = [];
-                if (data.en) {
-                    data.en.forEach(section => {
-                        section.definitions.slice(0, 3).forEach(d => {
-                            let defText = d.definition.replace(/<[^>]*>/g, "");
-                            let example = null;
-                            if (d.examples && d.examples.length > 0) {
-                                example = d.examples[0].replace(/<[^>]*>/g, "");
-                            }
-                            meanings.push({ partOfSpeech: section.partOfSpeech, definition: defText, example });
-                        });
-                    });
-                }
-                if (meanings.length === 0) return null;
-                return { word, phonetic: "", source: "wiktionary", meanings };
-            } catch(e) { return null; }
-        }
+function renderProgress(){
+const words=getWords(),now=new Date();
+const thisWeek=words.filter(w=>(now-new Date(w.date))<7*86400000).length;
+const thisMonth=words.filter(w=>new Date(w.date).getMonth()===now.getMonth()&&new Date(w.date).getFullYear()===now.getFullYear()).length;
+const thisYear=words.filter(w=>new Date(w.date).getFullYear()===now.getFullYear()).length;
+const letters=new Set(words.map(w=>w.word[0].toUpperCase())).size;
+const streak=calcStreak(words);
 
-        // === SLANG LOOKUP ===
-        async function lookupSlang() {
-            const word = document.getElementById("wordInput").value.trim().toLowerCase();
-            if (!word) return;
-            document.getElementById("results").innerHTML = '<div class="loading">Searching slang for "<strong>' + word + '</strong>"...</div>';
-            try {
-                const res = await fetch("https://api.urbandictionary.com/v0/define?term=" + encodeURIComponent(word));
-                if (!res.ok) throw new Error("API error");
-                const data = await res.json();
-                if (!data.list || data.list.length === 0) {
-                    document.getElementById("results").innerHTML = '<div class="error">No slang definitions found for "<strong>' + word + '</strong>".</div>';
-                    return;
-                }
-                let meanings = data.list.slice(0, 4).map(item => ({
-                    partOfSpeech: "slang",
-                    definition: item.definition.replace(/\[|\]/g, ""),
-                    example: item.example ? item.example.replace(/\[|\]/g, "") : null
-                }));
-                displayResult({ word, phonetic: "", source: "slang", meanings });
-            } catch(e) {
-                document.getElementById("results").innerHTML = '<div class="error">Failed to look up slang. Check your connection.</div>';
-            }
-        }
+document.getElementById('statsGrid').innerHTML=`
+<div class="stat-card"><div class="num">${words.length}</div><div class="label">Total Words</div></div>
+<div class="stat-card"><div class="num">${streak}🔥</div><div class="label">Day Streak</div></div>
+<div class="stat-card"><div class="num">${thisWeek}</div><div class="label">This Week</div></div>
+<div class="stat-card"><div class="num">${thisMonth}</div><div class="label">This Month</div></div>
+<div class="stat-card"><div class="num">${thisYear}</div><div class="label">This Year</div></div>
+<div class="stat-card"><div class="num">${letters}/26</div><div class="label">Letters Used</div></div>`;
 
-        // === DISPLAY RESULT ===
-        function displayResult(result) {
-            const sourceLabels = { dictionary: ["Free Dictionary", "source-dict"], wiktionary: ["Wiktionary", "source-wiki"], slang: ["Urban Dictionary", "source-slang"] };
-            const [srcName, srcClass] = sourceLabels[result.source] || ["Unknown", "source-dict"];
-            let html = '<div class="result-card">';
-            html += '<h3>' + result.word + '</h3>';
-            if (result.phonetic) html += '<div class="phonetic">' + result.phonetic + '</div>';
-            html += '<span class="source-badge ' + srcClass + '">' + srcName + '</span>';
-            result.meanings.forEach(m => {
-                html += '<div class="meaning"><div class="part-of-speech">' + m.partOfSpeech + '</div>';
-                html += '<div class="definition">' + m.definition + '</div>';
-                if (m.example) html += '<div class="example">""' + m.example + '"</div>';
-                html += '</div>';
-            });
-            const alreadySaved = vocabulary[result.word];
-            html += '<button class="save-btn' + (alreadySaved ? " saved" : "") + '" onclick="saveWord(this)" data-word="' + encodeURIComponent(JSON.stringify(result)) + '">' + (alreadySaved ? "✓ Already in Register" : "💾 Save to Register") + '</button>';
-            html += '</div>';
-            document.getElementById("results").innerHTML = html;
-        }
+const next=MILESTONES.find(m=>m.n>words.length)||MILESTONES[MILESTONES.length-1];
+const prev=MILESTONES.filter(m=>m.n<=words.length).pop();
+const pct=prev?Math.min(100,((words.length-(prev?prev.n:0))/(next.n-(prev?prev.n:0)))*100):Math.min(100,(words.length/next.n)*100);
+document.getElementById('milestoneSection').innerHTML=`<h3>🏆 Next Milestone: ${next.e} ${next.t} (${next.n} words)</h3><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div><p style="color:#888;font-size:0.85em">${words.length}/${next.n} words (${Math.round(pct)}%)</p>`;
 
-        // === SAVE WORD ===
-        function saveWord(btn) {
-            const result = JSON.parse(decodeURIComponent(btn.dataset.word));
-            if (vocabulary[result.word]) return;
-            vocabulary[result.word] = {
-                word: result.word,
-                source: result.source,
-                meanings: result.meanings,
-                date: new Date().toISOString()
-            };
-            localStorage.setItem("vocabRegister", JSON.stringify(vocabulary));
-            btn.textContent = "✓ Saved!";
-            btn.classList.add("saved");
-        }
+renderChart(words);
+}
 
-        // === REGISTER VIEW ===
-        function renderRegister() {
-            const words = Object.values(vocabulary).sort((a, b) => a.word.localeCompare(b.word));
-            const now = new Date();
-            const weekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000);
-            const thisWeekCount = words.filter(w => new Date(w.date) > weekAgo).length;
-            const lettersUsed = new Set(words.map(w => w.word[0])).size;
-            document.getElementById("totalWords").textContent = words.length;
-            document.getElementById("lettersUsed").textContent = lettersUsed;
-            document.getElementById("thisWeek").textContent = thisWeekCount;
+function calcStreak(words){
+if(!words.length)return 0;
+const dates=[...new Set(words.map(w=>new Date(w.date).toDateString()))].sort((a,b)=>new Date(b)-new Date(a));
+let streak=0,d=new Date();
+for(let i=0;i<dates.length;i++){
+const check=new Date(d);check.setDate(check.getDate()-i);
+if(dates.includes(check.toDateString()))streak++;else break;
+}
+return streak;
+}
 
-            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-            const usedLetters = new Set(words.map(w => w.word[0].toUpperCase()));
-            let alphaHtml = "";
-            letters.forEach(l => {
-                const hasWords = usedLetters.has(l);
-                const isActive = currentFilter === l;
-                alphaHtml += '<button class="alpha-btn' + (hasWords ? " has-words" : "") + (isActive ? " active" : "") + '" onclick="filterLetter(\'' + l + '\')">' + l + '</button>';
-            });
-            alphaHtml += '<button class="alpha-btn' + (currentFilter === null ? " active" : "") + '" onclick="filterLetter(null)">All</button>';
-            document.getElementById("alphabet").innerHTML = alphaHtml;
+function renderChart(words){
+const months=[];const now=new Date();
+for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);months.push({label:d.toLocaleString('default',{month:'short'}),count:words.filter(w=>{const wd=new Date(w.date);return wd.getMonth()===d.getMonth()&&wd.getFullYear()===d.getFullYear()}).length})}
+const max=Math.max(...months.map(m=>m.count),1);
+document.getElementById('chartSection').innerHTML='<h3 style="color:#667eea;margin-bottom:5px">📈 Monthly Activity</h3><div class="chart">'+months.map(m=>`<div class="chart-bar" style="height:${Math.max(4,(m.count/max)*80)}px"><span class="chart-val">${m.count}</span><span class="chart-label">${m.label}</span></div>`).join('')+'</div>';
+}
 
-            const filtered = currentFilter ? words.filter(w => w.word[0].toUpperCase() === currentFilter) : words;
-            if (filtered.length === 0) {
-                document.getElementById("wordList").innerHTML = '<div class="empty">' + (currentFilter ? "No words starting with " + currentFilter : "Your register is empty.<br>Look up words and save them!") + '</div>';
-                return;
-            }
-            let listHtml = "";
-            let currentLetter = "";
-            filtered.forEach(w => {
-                const firstLetter = w.word[0].toUpperCase();
-                if (firstLetter !== currentLetter) {
-                    currentLetter = firstLetter;
-                    listHtml += '<div class="letter-header">' + currentLetter + '</div>';
-                }
-                listHtml += '<div class="word-entry"><div class="word-entry-header"><h4>' + w.word + '</h4><span class="date">' + new Date(w.date).toLocaleDateString() + ' <button class="delete-btn" onclick="deleteWord(\'' + w.word + '\')">🗑️</button></span></div>';
-                w.meanings.slice(0, 2).forEach(m => {
-                    listHtml += '<div class="def-text"><strong>' + m.partOfSpeech + ':</strong> ' + m.definition + '</div>';
-                    if (m.example) listHtml += '<div class="ex-text">""' + m.example + '"</div>';
-                });
-                if (w.source === "slang") listHtml += '<div class="slang-note">🗣️ Slang term</div>';
-                listHtml += '</div>';
-            });
-            document.getElementById("wordList").innerHTML = listHtml;
-        }
+function toggleHelp(){const m=document.getElementById('helpModal');m.style.display=m.style.display==='block'?'none':'block'}
 
-        function filterLetter(letter) { currentFilter = letter; renderRegister(); }
+// Draggable help button
+const hb=document.getElementById('helpBtn');
+let savedPos=JSON.parse(localStorage.getItem('helpBtnPos')||'null');
+if(savedPos){hb.style.bottom='auto';hb.style.right='auto';hb.style.left=savedPos.x+'px';hb.style.top=savedPos.y+'px'}
 
-        function deleteWord(word) {
-            if (confirm("Remove \"" + word + "\" from your register?")) {
-                delete vocabulary[word];
-                localStorage.setItem("vocabRegister", JSON.stringify(vocabulary));
-                renderRegister();
-            }
-        }
-    </script>
+hb.addEventListener('touchstart',e=>{dragState.isDragging=true;const t=e.touches[0];const r=hb.getBoundingClientRect();dragState.startX=t.clientX-r.left;dragState.startY=t.clientY-r.top;e.preventDefault()});
+document.addEventListener('touchmove',e=>{if(!dragState.isDragging)return;const t=e.touches[0];hb.style.left=(t.clientX-dragState.startX)+'px';hb.style.top=(t.clientY-dragState.startY)+'px';hb.style.bottom='auto';hb.style.right='auto'});
+document.addEventListener('touchend',()=>{if(dragState.isDragging){dragState.isDragging=false;localStorage.setItem('helpBtnPos',JSON.stringify({x:parseInt(hb.style.left),y:parseInt(hb.style.top)}))}});
+
+// Show help on first visit
+if(!localStorage.getItem('helpSeen')){toggleHelp();localStorage.setItem('helpSeen','1')}
+
+// Enter key triggers define
+document.getElementById('wordInput').addEventListener('keydown',e=>{if(e.key==='Enter')defineWord()});
+</script>
 </body>
 </html>
