@@ -229,8 +229,8 @@ function showSlangResult(list,word){
 let html='<div class="result-card"><h3>'+word+' <span style="font-size:0.7em;color:#888">(slang)</span></h3>';
 let allDefs=[];
 list.slice(0,3).forEach(item=>{
-let def=item.definition.replace(/\[|\]/g,'');
-let ex=item.example?item.example.replace(/\[|\]/g,''):'';
+let def=item.definition.replace(/\\[|\\]/g,'');
+let ex=item.example?item.example.replace(/\\[|\\]/g,''):'';
 html+='<div class="def">'+def;
 if(ex)html+='<p class="example">📝 "'+ex+'"</p>';
 html+='</div>';
@@ -258,10 +258,10 @@ let words=getWords();
 let letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 let usedLetters=new Set(words.map(w=>w.word[0].toUpperCase()));
 let html='<div class="alpha-bar">';
-html+='<button class="alpha-btn '+(wordFilter==='all'?'active':'')+'" onclick="wordFilter=\'all\';renderWords()">All</button>';
+html+='<button class="alpha-btn '+(wordFilter==='all'?'active':'')+'" onclick="wordFilter=\\'all\\';renderWords()">All</button>';
 letters.forEach(l=>{
 let cls=wordFilter===l?'active':(usedLetters.has(l)?'has-words':'');
-html+='<button class="alpha-btn '+cls+'" onclick="wordFilter=\''+l+'\';renderWords()">'+l+'</button>';
+html+='<button class="alpha-btn '+cls+'" onclick="wordFilter=\\''+l+'\\';renderWords()">'+l+'</button>';
 });
 html+='</div>';
 let filtered=wordFilter==='all'?words:words.filter(w=>w.word[0].toUpperCase()===wordFilter);
@@ -344,4 +344,5 @@ if(!localStorage.getItem('vocabHelpSeen')){toggleHelp();localStorage.setItem('vo
 document.getElementById('wordInput').addEventListener('keydown',function(e){if(e.key==='Enter')defineWord()});
 </script>
 </body>
-</html>
+</html>'''
+
